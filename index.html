@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kollam Smart Agri-Monitor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- MODERN CSS RESET & VARIABLES --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            --primary-color: #00ff88;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #134e5e, #71b280, #004d40);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- GLASSMORPHISM CARD STYLE --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h2 {
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-weight: 300;
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* --- CROP SELECTOR --- */
+        .control-group label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+        select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            appearance: none; /* Removes default arrow */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+
+        /* --- HEALTH SCORE CARD --- */
+        .health-card {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .health-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(255,255,255,0.3);
+        }
+        .score-val {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 10px 0;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.2);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        /* --- IRRIGATION CARD --- */
+        .water-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .water-icon {
+            font-size: 2rem;
+            color: #4fc3f7;
+            background: rgba(79, 195, 247, 0.2);
+            padding: 12px;
+            border-radius: 50%;
+        }
+        .water-info {
+            text-align: right;
+        }
+        .water-info h4 { margin: 0; font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; }
+        .water-info div { font-size: 1.2rem; font-weight: 700; margin-top: 5px; }
+
+        /* --- DATA GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .data-card {
+            text-align: left;
+            position: relative;
+        }
+        .data-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        .data-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+        .data-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+        .unit {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        /* Specific Colors for Icons */
+        .icon-temp { color: #ff6b6b; }
+        .icon-moist { color: #4fc3f7; }
+        .icon-ph { color: #a8e6cf; }
+        .icon-ec { color: #f1c40f; }
+        .icon-nut { color: #e056fd; }
+
+        /* --- REC BOX --- */
+        .rec-box {
+            border-left: 4px solid #f1c40f;
+            background: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Smart Soil Monitor</h2>
+        <p>Kollam Region • Real-time Link</p>
+    </div>
+
+    <div class="glass-panel control-group">
+        <label><i class="fa-solid fa-seedling"></i> Select Target Crop</label>
+        <select id="cropSelect" onchange="sendCropCommand()">
+            <option value="4">🍌 Banana (Nendran)</option>
+            <option value="5">🥥 Coconut</option>
+            <option value="0">⚫ Black Pepper</option>
+            <option value="1">🌶️ Chilli</option>
+            <option value="2">🥜 Cashew</option>
+            <option value="3">🥔 Tapioca</option>
+            <option value="6">🟡 Turmeric</option>
+        </select>
+    </div>
+
+    <div class="glass-panel health-card" id="hCard">
+        <div class="grade-badge" id="grade">INITIALIZING...</div>
+        <div class="score-val"><span id="score">--</span><span style="font-size:1.5rem">%</span></div>
+        <div style="font-size: 0.9rem; opacity: 0.8;">Soil Health Score for <span id="cName">Banana</span></div>
+    </div>
+
+    <div class="glass-panel water-card">
+        <div class="water-icon"><i class="fa-solid fa-droplet"></i></div>
+        <div class="water-info">
+            <h4>Irrigation Forecast</h4>
+            <div id="water">Calculating...</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-temp"><i class="fa-solid fa-temperature-half"></i></div>
+            <div class="data-label">Temperature</div>
+            <div class="data-val"><span id="t">--</span> <span class="unit">°C</span></div>
+        </div>
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-moist"><i class="fa-solid fa-water"></i></div>
+            <div class="data-label">Moisture</div>
+            <div class="data-val"><span id="m">--</span> <span class="unit">%</span></div>
+        </div>
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-ph"><i class="fa-solid fa-flask"></i></div>
+            <div class="data-label">pH Level</div>
+            <div class="data-val"><span id="p">--</span></div>
+        </div>
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-ec"><i class="fa-solid fa-bolt"></i></div>
+            <div class="data-label">Conductivity</div>
+            <div class="data-val"><span id="e">--</span> <span class="unit">uS</span></div>
+        </div>
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-nut"><i class="fa-solid fa-leaf"></i></div>
+            <div class="data-label">Nitrogen (N)</div>
+            <div class="data-val"><span id="n">--</span> <span class="unit">mg/kg</span></div>
+        </div>
+        <div class="glass-panel data-card">
+            <div class="data-icon icon-nut" style="color:#ff9f43"><i class="fa-solid fa-seedling"></i></div>
+            <div class="data-label">Potassium (K)</div>
+            <div class="data-val"><span id="k">--</span> <span class="unit">mg/kg</span></div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-size: 0.7rem; opacity: 0.5; margin-top: 20px;">
+        Status: <span id="status">Connecting...</span> | Ver 2.0 (Pro UI)
+    </div>
+</div>
+
+<script>
+    // --- ⚠️ PASTE YOUR KEYS HERE ⚠️ ---
+    const CHANNEL_ID = 'xxx'; 
+    const READ_KEY   = 'xxx';
+    const WRITE_KEY  = 'xxx';
+
+    // Crop thresholds for local calc
+    const cropMoistureThresholds = [35, 40, 25, 35, 50, 30, 45]; 
+
+    function fetchData() {
+        const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_KEY}&t=${Math.random()}`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data === "-1") {
+                    document.getElementById('status').innerText = "Key Error ❌";
+                    return;
+                }
+                
+                document.getElementById('status').innerText = "Live Connected ✅";
+
+                // Update Sensors
+                if(data.field1) document.getElementById('t').innerText = parseFloat(data.field1).toFixed(1);
+                if(data.field2) document.getElementById('m').innerText = parseFloat(data.field2).toFixed(1);
+                if(data.field3) document.getElementById('p').innerText = parseFloat(data.field3).toFixed(1);
+                if(data.field4) document.getElementById('e').innerText = data.field4;
+                if(data.field5) document.getElementById('n').innerText = data.field5;
+                if(data.field7) document.getElementById('k').innerText = data.field7;
+
+                // Update Health Score
+                if (data.field8) {
+                    const score = parseInt(data.field8);
+                    document.getElementById('score').innerText = score;
+                    updateVisuals(score);
+                }
+
+                // Irrigation Logic
+                const cropId = document.getElementById('cropSelect').value;
+                const currentMoist = parseFloat(data.field2);
+                const critical = cropMoistureThresholds[cropId];
+                
+                if(currentMoist <= critical) {
+                    document.getElementById('water').innerHTML = "<span style='color:#ff6b6b'>⚠️ IRRIGATE NOW</span>";
+                } else {
+                    const hours = Math.floor((currentMoist - critical) * 2.5);
+                    document.getElementById('water').innerHTML = `Next water in ~${hours} hrs`;
+                }
+            })
+            .catch(err => {
+                document.getElementById('status').innerText = "Network Error ❌";
+            });
+    }
+
+    function sendCropCommand() {
+        const sel = document.getElementById('cropSelect');
+        document.getElementById('cName').innerText = sel.options[sel.selectedIndex].text.split(" ")[1];
+        
+        // Write to STATUS field
+        const url = `https://api.thingspeak.com/update?api_key=${WRITE_KEY}&status=${sel.value}`;
+        fetch(url).then(r => console.log("Cmd Sent"));
+    }
+
+    function updateVisuals(score) {
+        const card = document.getElementById('hCard');
+        let grade = "POOR";
+        let color = "rgba(255, 71, 87, 0.25)"; // Red
+
+        if(score >= 90) { 
+            grade = "EXCELLENT"; 
+            color = "rgba(46, 213, 115, 0.25)"; // Green
+        } else if(score >= 70) { 
+            grade = "GOOD"; 
+            color = "rgba(255, 165, 2, 0.25)"; // Orange
+        } else if(score >= 50) { 
+            grade = "AVERAGE"; 
+            color = "rgba(225, 177, 44, 0.25)"; // Yellow
+        }
+
+        document.getElementById('grade').innerText = grade;
+        card.style.background = color;
+    }
+
+    setInterval(fetchData, 5000);
+    window.onload = fetchData;
+</script>
+
+</body>
+</html>
