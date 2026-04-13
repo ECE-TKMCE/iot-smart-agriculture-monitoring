@@ -75,15 +75,7 @@ The project focuses on delivering a **low-cost, scalable, and efficient monitori
 
 
 
-## 📸 Results & Demonstration
 
-* Real-time dashboard output
-* ThingSpeak live graphs
-* Stable RS485 communication
-
-*(Add images here)*
-
----
 
 ## 🔍 Applications
 
